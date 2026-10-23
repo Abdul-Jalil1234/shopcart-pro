@@ -1,14 +1,6 @@
 # 🛒 ShopCart Pro - Complete E-Commerce Solution
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.0.1-black)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.1.1-blue)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7.3-blue)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.16-38bdf8)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-Commercial-green)](https://reactbd.com/)
-
-A modern, feature-rich e-commerce application built with Next.js 16, TypeScript, Sanity CMS, Clerk Authentication, and Stripe/Clerk Payments. This free version includes core e-commerce features with premium features available in the paid version.
-
-![ShopCart Pro Preview](./public/preview.png)
+A modern, feature-rich e-commerce application built with Next.js 16, TypeScript, Sanity CMS, Clerk Authentication, and Stripe/Clerk Payments. 
 
 ## ✨ Features
 
@@ -26,7 +18,7 @@ A modern, feature-rich e-commerce application built with Next.js 16, TypeScript,
 - ⭐ **Product Reviews** - Customer reviews and ratings
 - 📧 **Email Notifications** - Order confirmations and updates via Nodemailer
 
-### 👑 Premium Features (Paid Version)
+### 👑 Premium Features
 
 - 📊 **Advanced Analytics Dashboard** - Comprehensive business insights
 - 👥 **Employee Management System** - Multi-role employee portal
@@ -37,7 +29,6 @@ A modern, feature-rich e-commerce application built with Next.js 16, TypeScript,
 - 🎨 **Custom Admin Branding** - Customize admin panel
 - 🚀 **Priority Support & Updates** - Fast support and early access to features
 
-[**Upgrade to Premium →**](https://www.buymeacoffee.com/reactbd)
 
 ---
 
@@ -116,9 +107,6 @@ EMAIL_PASSWORD=your_app_password
 
 # Admin Configuration
 NEXT_PUBLIC_ADMIN_EMAIL=admin@yourdomain.com
-
-# Premium Version Link (Optional)
-NEXT_PUBLIC_PAID_VERION=https://www.buymeacoffee.com/reactbd
 
 # Company Information (Optional)
 NEXT_PUBLIC_COMPANY_NAME=ShopCart
@@ -499,7 +487,7 @@ shopcartpro/
 └── package.json                # Dependencies & Scripts
 ```
 
-**Note**: Routes marked with ⭐ show premium upgrade messages in the free version.
+
 
 ---
 
@@ -524,7 +512,7 @@ shopcartpro/
 ### 👔 Employee Portal (Premium)
 
 - URL: [http://localhost:3000/employee](http://localhost:3000/employee)
-- **Note**: Shows upgrade message in free version
+
 
 ---
 
@@ -666,26 +654,10 @@ npm run build
 
 ---
 
-## 📄 License
-
-This is a **commercial product** licensed under ReactBD Technologies.
-
-**Free Version**: Includes core e-commerce features
-**Paid Version**: Includes all premium features and priority support
-
-[**Get Premium Version →**](https://www.buymeacoffee.com/reactbd)
 
 ---
 
-## 🤝 Support
 
-Need help? Here's how to get support:
-
-- 📧 **Email**: support@reactbd.com
-- 🌐 **Website**: [ReactBD.com](https://reactbd.com/)
-- 💬 **Premium Support**: Available for paid version customers
-
----
 
 ## 🙏 Acknowledgments
 
@@ -705,7 +677,7 @@ Built with amazing open-source technologies:
 
 ## 📈 Version
 
-**Current Version**: 0.1.0 (Free)
+**Current Version**: 0.1.0 
 
 **Premium Version Features**:
 
@@ -718,14 +690,6 @@ Built with amazing open-source technologies:
 - 🎨 Custom Branding
 - 🚀 Priority Support
 
-[**Upgrade Now →**](https://www.buymeacoffee.com/reactbd)
 
 ---
 
-<div align="center">
-
-**Made with ❤️ by [ReactBD Technologies](https://reactbd.com/)**
-
-⭐ Star this repo if you find it helpful!
-
-</div>
