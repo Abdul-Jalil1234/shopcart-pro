@@ -18,7 +18,7 @@ A modern, feature-rich e-commerce application built with Next.js 16, TypeScript,
 - ⭐ **Product Reviews** - Customer reviews and ratings
 - 📧 **Email Notifications** - Order confirmations and updates via Nodemailer
 
-### 👑 Premium Features
+### 🔓 Admin & Business Features (all included)
 
 - 📊 **Advanced Analytics Dashboard** - Comprehensive business insights
 - 👥 **Employee Management System** - Multi-role employee portal
@@ -26,8 +26,6 @@ A modern, feature-rich e-commerce application built with Next.js 16, TypeScript,
 - 📬 **Subscription Management** - Newsletter and email campaigns
 - 📈 **Customer Insights & Reports** - Detailed customer analytics
 - 📥 **Export Data to Excel/CSV** - Export all data for analysis
-- 🎨 **Custom Admin Branding** - Customize admin panel
-- 🚀 **Priority Support & Updates** - Fast support and early access to features
 
 
 ---
