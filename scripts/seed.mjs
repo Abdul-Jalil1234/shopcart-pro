@@ -13,8 +13,16 @@
  * Every seeded document has an _id starting with "seed-", so re-running replaces them
  * in place and --reset only ever deletes those. Your own content is never touched.
  *
- * Images are generated placeholders (placehold.co) uploaded to your dataset. Swap them for
- * real product photos in Sanity Studio (/studio) whenever you like.
+ * Images are REAL photographs searched on Pixabay or Unsplash and uploaded into your Sanity
+ * dataset (so nothing is hot-linked). Set one of these in .env:
+ *
+ *   PIXABAY_API_KEY=...        free key: https://pixabay.com/api/docs/
+ *   UNSPLASH_ACCESS_KEY=...    free key: https://unsplash.com/developers  (demo apps: 50 req/hour)
+ *   PHOTO_PROVIDER=pixabay|unsplash   optional; defaults to Pixabay when both keys are set
+ *
+ * With no key, generated placeholders (placehold.co) are used so the seed still works.
+ * Search results are cached in scripts/.photo-cache.json, so re-runs cost no API calls.
+ * Photographer credit is stored on every uploaded asset (source.name / source.url).
  */
 
 const args = new Set(process.argv.slice(2));
@@ -110,6 +118,36 @@ const CATEGORY_BLURB = {
   "gadget-accessories": "Dependable everyday tech with a 12-month warranty.",
   appliances: "Practical, energy-conscious and easy to set up.",
 };
+
+// Search terms for photos. Product queries are derived from the product name (brand and size
+// words removed) with the category term as a fallback.
+const CATEGORY_QUERY = {
+  mobiles: "smartphone",
+  smartphones: "smartphone mobile phone",
+  tablets: "tablet computer",
+  television: "smart tv living room",
+  refrigerators: "refrigerator kitchen",
+  "washing-machine": "washing machine laundry",
+  "air-conditioners": "air conditioner",
+  "kitchen-appliances": "kitchen appliance",
+  "gadget-accessories": "tech gadget accessories",
+  appliances: "home appliance",
+};
+const BRAND_WORDS = /\b(hi-tech|pixel edge|hp limited|the apple limited|nova home|aero cool|limited|lite|x1|z|go|mini|active|tkl)\b/gi;
+const productQueries = (name, cat) => {
+  const cleaned = name
+    .replace(BRAND_WORDS, " ")
+    .replace(/\b\d+(\.\d+)?\s?-?(inch|l|kg|w|ton|btu|mah|m|v|\+)?\b/gi, " ")
+    .replace(/\b(2-pack|4k|hd|qled|inverter|5-speed|2-slice)\b/gi, " ")
+    .replace(/[^a-zA-Z\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  return [cleaned, CATEGORY_QUERY[cat]].filter(Boolean);
+};
+const BANNER_QUERY = ["online shopping sale", "shopping bags sale", "package delivery"];
+const BLOG_QUERY = {};
+
 
 const BANNERS = [
   {
@@ -321,9 +359,103 @@ console.log(
   `Seeding project ${client.config().projectId}, dataset "${client.config().dataset}"\n`
 );
 
-// Upload placeholder images (cached, retried, a few at a time).
+
+// ---------------------------------------------------------------- photo search
+
+const PIXABAY_KEY = process.env.PIXABAY_API_KEY;
+const UNSPLASH_KEY = process.env.UNSPLASH_ACCESS_KEY;
+const PROVIDER =
+  process.env.PHOTO_PROVIDER === "unsplash" && UNSPLASH_KEY
+    ? "unsplash"
+    : PIXABAY_KEY
+      ? "pixabay"
+      : UNSPLASH_KEY
+        ? "unsplash"
+        : null;
+
+if (PROVIDER) console.log(`Photo source: ${PROVIDER}`);
+else console.warn("No PIXABAY_API_KEY or UNSPLASH_ACCESS_KEY set — using placeholder images.\n");
+
+const { readFile, writeFile } = await import("node:fs/promises");
+const CACHE_FILE = new URL("./.photo-cache.json", import.meta.url);
+let searchCache = {};
+try {
+  searchCache = JSON.parse(await readFile(CACHE_FILE, "utf8"));
+} catch {
+  /* first run */
+}
+const searchJobs = new Map();
+
+async function searchProvider(query) {
+  if (PROVIDER === "pixabay") {
+    const url =
+      `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(query.slice(0, 100))}` +
+      `&image_type=photo&orientation=horizontal&safesearch=true&order=popular&per_page=30`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Pixabay HTTP ${res.status}`);
+    const data = await res.json();
+    return (data.hits ?? []).map((h) => ({
+      id: `pixabay-${h.id}`,
+      url: h.largeImageURL,
+      credit: h.user,
+      page: h.pageURL,
+    }));
+  }
+  const url =
+    `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}` +
+    `&per_page=30&content_filter=high`;
+  const res = await fetch(url, { headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` } });
+  if (!res.ok) throw new Error(`Unsplash HTTP ${res.status}`);
+  const data = await res.json();
+  return (data.results ?? []).map((r) => ({
+    id: `unsplash-${r.id}`,
+    url: `${r.urls.raw}&w=1200&q=80&fm=jpg&fit=max`,
+    credit: r.user?.name,
+    page: `${r.links.html}?utm_source=shopcart_seed&utm_medium=referral`,
+    track: r.links.download_location,
+  }));
+}
+
+async function searchPhotos(query) {
+  if (!PROVIDER) return [];
+  const key = `${PROVIDER}:${query.toLowerCase()}`;
+  if (searchCache[key]) return searchCache[key];
+  if (!searchJobs.has(key)) {
+    searchJobs.set(
+      key,
+      (async () => {
+        try {
+          const results = await searchProvider(query);
+          if (results.length) searchCache[key] = results;
+          return results;
+        } catch (error) {
+          console.warn(`  ! photo search failed for "${query}": ${error.message}`);
+          return [];
+        }
+      })()
+    );
+  }
+  return searchJobs.get(key);
+}
+
+const usedPhotos = new Set();
+
+/** Returns the next unused photo for the first query that has results. */
+async function pickPhoto(queries) {
+  for (const query of queries) {
+    const results = await searchPhotos(query);
+    const hit = results.find((r) => !usedPhotos.has(r.id));
+    if (hit) {
+      usedPhotos.add(hit.id);
+      return hit;
+    }
+  }
+  return null;
+}
+
+// Upload images (cached, retried, a few at a time).
 const uploads = new Map();
-async function uploadImage(url, filename) {
+async function uploadImage(url, filename, photo = null) {
   if (uploads.has(url)) return uploads.get(url);
   const job = (async () => {
     for (let attempt = 1; attempt <= 3; attempt++) {
@@ -331,10 +463,17 @@ async function uploadImage(url, filename) {
         const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const buffer = Buffer.from(await res.arrayBuffer());
+        const contentType = res.headers.get("content-type")?.split(";")[0] || "image/jpeg";
         const asset = await client.assets.upload("image", buffer, {
           filename,
-          contentType: "image/png",
+          contentType,
+          ...(photo
+            ? {
+                source: { id: photo.id, name: `${PROVIDER}${photo.credit ? ` — ${photo.credit}` : ""}`, url: photo.page },
+              }
+            : {}),
         });
+        if (photo?.track) fetch(photo.track, { headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` } }).catch(() => {});
         return { _type: "image", asset: ref(asset._id) };
       } catch (error) {
         if (attempt === 3) {
@@ -347,6 +486,16 @@ async function uploadImage(url, filename) {
   })();
   uploads.set(url, job);
   return job;
+}
+
+/**
+ * A real photo for `queries` (tried in order), or a labelled placeholder when no photo
+ * provider is configured / nothing was found.
+ */
+async function photoImage({ queries, filename, label, w, h, i = 0 }) {
+  const picked = await pickPhoto(queries);
+  if (picked) return uploadImage(picked.url, filename.replace(/\.png$/, ".jpg"), picked);
+  return uploadImage(placeholder(label, w, h, i), filename);
 }
 
 async function inBatches(items, size, fn) {
@@ -384,7 +533,7 @@ if (RESET) {
   }
 }
 
-console.log("Uploading placeholder images...");
+console.log("Uploading images...");
 const categoryDocs = await inBatches(CATEGORIES, 4, async ([s, title, description, range, featured], i) => ({
   _id: ids.category(s),
   _type: "category",
@@ -393,7 +542,7 @@ const categoryDocs = await inBatches(CATEGORIES, 4, async ([s, title, descriptio
   description,
   range,
   featured,
-  image: await uploadImage(placeholder(title, 600, 600, i), `category-${s}.png`),
+  image: await photoImage({ queries: [CATEGORY_QUERY[s]], filename: `category-${s}.png`, label: title, w: 600, h: 600, i }),
 }));
 
 const brandDocs = await inBatches(BRANDS, 4, async ([s, title, description], i) => ({
@@ -402,7 +551,7 @@ const brandDocs = await inBatches(BRANDS, 4, async ([s, title, description], i) 
   title,
   slug: slug(s),
   description,
-  image: await uploadImage(placeholder(title, 400, 400, i + 3), `brand-${s}.png`),
+  image: await uploadImage(placeholder(title, 400, 400, i + 3), `brand-${s}.png`), // brands are fictional: logo-style placeholders on purpose
 }));
 
 const authorDoc = {
@@ -431,10 +580,9 @@ await commit("blog categories", blogCategoryDocs);
 const productDocs = await inBatches(PRODUCTS, 5, async (row, index) => {
   const [name, cat, brand, variant, price, discount, stock, status, featured] = row;
   const s = toSlug(name);
-  const [front, back] = await Promise.all([
-    uploadImage(placeholder(name, 800, 800, index), `${s}-1.png`),
-    uploadImage(placeholder(`${name} (side)`, 800, 800, index + 2), `${s}-2.png`),
-  ]);
+  const queries = productQueries(name, cat);
+  const front = await photoImage({ queries, filename: `${s}-1.png`, label: name, w: 800, h: 800, i: index });
+  const back = await photoImage({ queries, filename: `${s}-2.png`, label: `${name} (side)`, w: 800, h: 800, i: index + 2 });
   return {
     _id: ids.product(s),
     _type: "product",
@@ -464,7 +612,7 @@ const bannerDocs = await inBatches(BANNERS, 3, async (b, i) => ({
   description: b.description,
   badge: b.badge,
   discountAmount: b.discountAmount,
-  image: await uploadImage(placeholder(b.title, 1200, 600, i + 1), `${b.id}.png`),
+  image: await photoImage({ queries: [BANNER_QUERY[i % BANNER_QUERY.length], "ecommerce shopping"], filename: `${b.id}.png`, label: b.title, w: 1200, h: 600, i: i + 1 }),
 }));
 await commit("banners", bannerDocs);
 
@@ -474,7 +622,7 @@ const postDocs = await inBatches(POSTS, 4, async (post, i) => ({
   title: post.title,
   slug: slug(post.slug),
   author: ref(AUTHOR.id),
-  mainImage: await uploadImage(placeholder(post.title, 1200, 600, i + 2), `blog-${post.slug}.png`),
+  mainImage: await photoImage({ queries: [post.photoQuery ?? "technology gadgets", "technology"], filename: `blog-${post.slug}.png`, label: post.title, w: 1200, h: 600, i: i + 2 }),
   blogcategories: [{ ...ref(ids.blogCategory(post.category)), _key: `${post.slug}-cat` }],
   publishedAt: post.published,
   isLatest: true,
@@ -489,4 +637,6 @@ const failed = [...uploads.values()].length - (await Promise.all(uploads.values(
 console.log(
   `\nDone.${failed ? ` ${failed} image(s) failed to upload; re-run "pnpm seed" to retry them.` : ""}`
 );
-console.log("Open /studio to replace the placeholder images with real photos.\n" + summary());
+await writeFile(CACHE_FILE, JSON.stringify(searchCache, null, 1)).catch(() => {});
+if (!PROVIDER) console.log("Add PIXABAY_API_KEY or UNSPLASH_ACCESS_KEY to .env and run `pnpm seed:reset` for real photos.");
+console.log(summary());

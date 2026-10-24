@@ -121,11 +121,11 @@ export default function AdminUserManagement() {
           <CardContent>
             <div className="space-y-2">
               <Button
-                onClick={() => setEmail("dev.reactbd@gmail.com")}
+                onClick={() => setEmail(process.env.NEXT_PUBLIC_ADMIN_EMAIL?.split(",")[0]?.replace(/[\[\]\s]/g, "") ?? "")}
                 variant="outline"
                 size="sm"
               >
-                Set Current User (dev.reactbd@gmail.com)
+                Use admin email
               </Button>
             </div>
           </CardContent>

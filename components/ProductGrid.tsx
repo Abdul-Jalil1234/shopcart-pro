@@ -445,7 +445,7 @@ const ProductGrid = () => {
                           </SelectItem>
                           <SelectItem value="5">
                             <span className="flex items-center gap-2">
-                              🔥 Hot Products (Premium)
+                              🔥 Hot Products
                             </span>
                           </SelectItem>
                           <SelectItem value="4">
@@ -467,7 +467,7 @@ const ProductGrid = () => {
                             className="w-fit border-shop_orange/30 text-shop_orange"
                           >
                             {rating === "5"
-                              ? "🔥 Premium Only"
+                              ? "🔥 Hot Only"
                               : rating === "4"
                               ? "✨ High Quality+"
                               : "🛍️ Standard+"}
@@ -541,7 +541,7 @@ const ProductGrid = () => {
                           >
                             Quality:{" "}
                             {rating === "5"
-                              ? "🔥 Premium"
+                              ? "🔥 Hot"
                               : rating === "4"
                               ? "✨ High Quality"
                               : "🛍️ Standard+"}

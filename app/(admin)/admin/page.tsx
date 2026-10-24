@@ -1,12 +1,11 @@
-import AdminPremiumFeature from "@/components/admin/AdminPremiumFeature";
+import type { Metadata } from "next";
+import AdminDashboardOverview from "@/components/admin/AdminDashboardOverview";
 
-const AdminPage = () => {
-  return (
-    <AdminPremiumFeature
-      featureName="Admin Dashboard"
-      description="Unlock powerful analytics, insights, and management tools with the premium version of ShopCart Pro."
-    />
-  );
+export const metadata: Metadata = {
+  title: "Dashboard - Admin Panel",
+  description: "Store overview, sales and pending requests",
 };
 
-export default AdminPage;
+export default function AdminPage() {
+  return <AdminDashboardOverview />;
+}

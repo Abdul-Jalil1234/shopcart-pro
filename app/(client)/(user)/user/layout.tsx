@@ -22,6 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useClerk } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
+import { isUserAdmin } from "@/lib/adminUtils";
 import Container from "@/components/Container";
 
 const sidebarItems = [
@@ -225,9 +226,8 @@ export default function UserLayout({
                     );
                   })}
 
-                  {/* Admin Section - Show for dev.reactbd@gmail.com */}
-                  {user?.emailAddresses?.[0]?.emailAddress ===
-                    "dev.reactbd@gmail.com" && (
+                  {/* Admin Section - shown to emails listed in NEXT_PUBLIC_ADMIN_EMAIL */}
+                  {isUserAdmin(user?.primaryEmailAddress?.emailAddress) && (
                     <>
                       <div className="w-full border-t border-gray-200 my-3"></div>
                       <div className="w-full text-xs text-gray-500 mb-2 px-2">
@@ -365,8 +365,7 @@ export default function UserLayout({
                 })}
 
                 {/* Admin Section - Mobile */}
-                {user?.emailAddresses?.[0]?.emailAddress ===
-                  "dev.reactbd@gmail.com" && (
+                {isUserAdmin(user?.primaryEmailAddress?.emailAddress) && (
                   <>
                     <div className="border-t border-gray-200 pt-4 mt-4">
                       <div className="text-xs text-gray-500 mb-3 px-4">

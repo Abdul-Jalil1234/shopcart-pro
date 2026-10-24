@@ -40,7 +40,13 @@ import {
   Package2,
   ChevronLeft,
   ChevronRight,
+  Plus,
+  Pencil,
+  Trash2,
 } from "lucide-react";
+import { toast } from "sonner";
+import ProductFormDialog from "./ProductFormDialog";
+import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 import { ProductsSkeleton } from "./SkeletonLoaders";
 import { Product } from "./types";
 import { safeApiCall, handleApiError } from "./apiHelpers";
@@ -67,6 +73,42 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
     useState<ADMIN_CATEGORIES_QUERYResult>(initialCategories);
 
   const limit = 10;
+
+  // Create / edit / delete state
+  const [formOpen, setFormOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const openCreate = () => {
+    setEditingId(null);
+    setFormOpen(true);
+  };
+  const openEdit = (product: Product) => {
+    setIsProductDetailsOpen(false);
+    setEditingId(product._id);
+    setFormOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!productToDelete) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/products/${productToDelete._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error ?? "Failed to delete product");
+      toast.success(`"${productToDelete.name}" deleted`);
+      setProductToDelete(null);
+      setIsProductDetailsOpen(false);
+      fetchProducts(currentPage);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to delete product");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   // Debounce search term
   useEffect(() => {
@@ -223,7 +265,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
       {/* Header */}
       <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
         <h3 className="text-lg font-semibold">
-          Products Management (Read-Only)
+          Products Management
         </h3>
         <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-2 sm:space-y-0">
           <Input
@@ -248,10 +290,15 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
           <Button
             onClick={() => fetchProducts(currentPage)}
             size="sm"
+            variant="outline"
             className="w-full sm:w-auto"
           >
             <RefreshCw className="h-4 w-4" />
             <span className="ml-2 sm:hidden">Refresh</span>
+          </Button>
+          <Button onClick={openCreate} size="sm" className="w-full sm:w-auto">
+            <Plus className="h-4 w-4 mr-1" />
+            Add product
           </Button>
         </div>
       </div>
@@ -358,6 +405,23 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
                               >
                                 <Eye className="h-4 w-4" />
                               </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                aria-label="Edit product"
+                                onClick={() => openEdit(product)}
+                              >
+                                <Pencil className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                aria-label="Delete product"
+                                className="text-red-600 hover:text-red-700"
+                                onClick={() => setProductToDelete(product)}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -422,6 +486,23 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
                             onClick={() => handleViewProduct(product)}
                           >
                             <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            aria-label="Edit product"
+                            onClick={() => openEdit(product)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            aria-label="Delete product"
+                            className="text-red-600"
+                            onClick={() => setProductToDelete(product)}
+                          >
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
@@ -503,13 +584,29 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
         </>
       )}
 
+      <ProductFormDialog
+        open={formOpen}
+        productId={editingId}
+        onClose={() => setFormOpen(false)}
+        onSaved={() => fetchProducts(currentPage)}
+      />
+
+      <DeleteConfirmationDialog
+        isOpen={Boolean(productToDelete)}
+        onClose={() => !deleting && setProductToDelete(null)}
+        onConfirm={confirmDelete}
+        title="Delete product"
+        description={`Permanently delete "${productToDelete?.name ?? ""}" from Sanity? Its reviews will be removed too. This cannot be undone.`}
+        isLoading={deleting}
+      />
+
       {/* Product Details Sidebar */}
       <Sheet open={isProductDetailsOpen} onOpenChange={setIsProductDetailsOpen}>
         <SheetContent className="w-full sm:w-[480px] md:w-[640px] overflow-y-auto">
           <SheetHeader className="pb-6">
             <SheetTitle>Product Details</SheetTitle>
             <SheetDescription>
-              Complete product information in read-only mode
+              Complete product information
             </SheetDescription>
           </SheetHeader>
 

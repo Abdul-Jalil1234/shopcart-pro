@@ -1,12 +1,11 @@
-import AdminPremiumFeature from "@/components/admin/AdminPremiumFeature";
+import type { Metadata } from "next";
+import AdminAnalytics from "@/components/admin/AdminAnalyticsNew";
 
-const AdminAnalyticsPage = () => {
-  return (
-    <AdminPremiumFeature
-      featureName="Advanced Analytics"
-      description="Get detailed insights into your store performance, customer behavior, sales trends, and more with our comprehensive analytics dashboard."
-    />
-  );
+export const metadata: Metadata = {
+  title: "Analytics - Admin Panel",
+  description: "Sales, customers and product performance",
 };
 
-export default AdminAnalyticsPage;
+export default function AdminAnalyticsPage() {
+  return <AdminAnalytics />;
+}

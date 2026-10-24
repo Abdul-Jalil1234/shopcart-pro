@@ -45,3 +45,4 @@ next-env.d.ts
 # local secrets
 .env
 .env.local
+scripts/.photo-cache.json

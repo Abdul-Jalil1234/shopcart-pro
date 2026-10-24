@@ -13,7 +13,6 @@ import {
   Shield,
   Briefcase,
   Wallet,
-  Crown,
 } from "lucide-react";
 import { useUser, useClerk } from "@clerk/nextjs";
 import {
@@ -181,20 +180,19 @@ const UserDropdown = () => {
 
           <div className="my-1 border-t border-gray-100"></div>
 
-          {/* Employee Dashboard - Available for Everyone (Paid Feature) */}
-          <Link
-            href="/employee"
-            onClick={handleLinkClick}
-            className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-purple-50 transition-colors duration-200 group border border-purple-100"
-          >
-            <Briefcase className="w-4 h-4 text-purple-500 group-hover:text-purple-600 transition-colors" />
-            <div className="flex items-center justify-between w-full">
-              <span className="text-purple-600 group-hover:text-purple-700 transition-colors font-medium">
+          {/* Employee Dashboard - shown to employees and admins */}
+          {(isEmployee || isAdmin) && (
+            <Link
+              href="/employee"
+              onClick={handleLinkClick}
+              className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-shop_light_bg transition-colors duration-200 group"
+            >
+              <Briefcase className="w-4 h-4 text-gray-500 group-hover:text-shop_light_green transition-colors" />
+              <span className="text-gray-800 group-hover:text-shop_light_green transition-colors">
                 Employee Dashboard
               </span>
-              <Crown className="w-4 h-4 text-purple-500" />
-            </div>
-          </Link>
+            </Link>
+          )}
 
           <Link
             href="/help"

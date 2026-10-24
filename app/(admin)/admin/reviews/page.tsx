@@ -1,12 +1,11 @@
-import AdminPremiumFeature from "@/components/admin/AdminPremiumFeature";
+import type { Metadata } from "next";
+import AdminReviews from "@/components/admin/AdminReviews";
 
-const AdminReviewsPage = () => {
-  return (
-    <AdminPremiumFeature
-      featureName="Review Management"
-      description="Manage customer reviews, moderate content, and gain valuable insights from customer feedback with our premium review management system."
-    />
-  );
+export const metadata: Metadata = {
+  title: "Reviews - Admin Panel",
+  description: "Moderate customer reviews",
 };
 
-export default AdminReviewsPage;
+export default function AdminReviewsPage() {
+  return <AdminReviews />;
+}

@@ -22,7 +22,7 @@ import {
   ChevronUp,
   Star,
   Mail,
-  Crown,
+  Briefcase,
 } from "lucide-react";
 
 interface AdminTopNavigationProps {
@@ -41,18 +41,21 @@ const adminRoutes = [
     label: "Dashboard",
     icon: LayoutDashboard,
     href: "/admin",
-    isPremium: true,
   },
   {
     label: "Analytics",
     icon: BarChart3,
     href: "/admin/analytics",
-    isPremium: true,
   },
   {
     label: "Users",
     icon: Users,
     href: "/admin/users",
+  },
+  {
+    label: "Employees",
+    icon: Briefcase,
+    href: "/admin/employees",
   },
   {
     label: "Account Requests",
@@ -73,13 +76,11 @@ const adminRoutes = [
     label: "Reviews",
     icon: Star,
     href: "/admin/reviews",
-    isPremium: true,
   },
   {
     label: "Subscriptions",
     icon: Mail,
     href: "/admin/subscriptions",
-    isPremium: true,
   },
   {
     label: "Notifications",
@@ -249,9 +250,6 @@ const AdminTopNavigation = ({ currentPath, user }: AdminTopNavigationProps) => {
                           )}
                         >
                           <span>{route.label}</span>
-                          {route.isPremium && (
-                            <Crown className="w-3 h-3 text-yellow-500" />
-                          )}
                         </div>
                       </Link>
                     );
@@ -362,9 +360,6 @@ const AdminTopNavigation = ({ currentPath, user }: AdminTopNavigationProps) => {
                       )}
                     >
                       <span>{route.label}</span>
-                      {route.isPremium && (
-                        <Crown className="w-4 h-4 text-yellow-400" />
-                      )}
                     </div>
                   </div>
                   {isActive && (

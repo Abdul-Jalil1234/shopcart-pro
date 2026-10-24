@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Product, Category } from "@/sanity.types";
 import { urlFor } from "@/sanity/lib/image";
 
-const BASE_URL = "https://shopcartpro.reactbd.org";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 /**
  * Generate metadata for product pages

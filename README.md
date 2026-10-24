@@ -49,7 +49,7 @@ Before you begin, ensure you have the following installed:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/noorjsdivs/shopcartpro-yt
+git clone https://github.com/Abdul-Jalil1234/shopcart-pro.git
 cd shopcartpro
 ```
 
@@ -274,11 +274,11 @@ shopcartpro/
 ├── app/                           # Next.js 16 App Router
 │   ├── (admin)/                  # Admin Panel Routes
 │   │   └── admin/
-│   │       ├── page.tsx          # Admin Dashboard (Premium) ⭐
+│   │       ├── page.tsx          # Admin Dashboard
 │   │       ├── layout.tsx        # Admin layout with navigation
-│   │       ├── analytics/        # Analytics Dashboard (Premium) ⭐
-│   │       ├── reviews/          # Review Management (Premium) ⭐
-│   │       ├── subscriptions/    # Subscription Management (Premium) ⭐
+│   │       ├── analytics/        # Analytics Dashboard
+│   │       ├── reviews/          # Review Management
+│   │       ├── subscriptions/    # Subscription Management
 │   │       ├── employees/        # Employee Management
 │   │       ├── products/         # Product Management
 │   │       ├── orders/           # Order Management
@@ -341,10 +341,12 @@ shopcartpro/
 │   │               ├── business-accounts/      # Business Accounts
 │   │               └── premium-accounts/       # Premium Accounts
 │   │
-│   ├── (employee)/               # Employee Portal (Premium) ⭐
+│   ├── (employee)/               # Employee Portal
 │   │   └── employee/
-│   │       ├── page.tsx         # Shows Premium Upgrade Message
-│   │       └── layout.tsx       # Employee layout (gated)
+│   │       ├── page.tsx         # Redirects to dashboard / orders
+│   │       ├── dashboard/       # Employee analytics
+│   │       ├── orders/          # Order management
+│   │       └── layout.tsx       # Employee layout
 │   │
 │   ├── api/                      # API Routes
 │   │   ├── checkout/
@@ -376,7 +378,6 @@ shopcartpro/
 ├── components/                   # React Components
 │   ├── admin/                   # Admin Components
 │   │   ├── AdminDashboardOverview.tsx
-│   │   ├── AdminPremiumFeature.tsx    # Premium Message Component
 │   │   ├── AdminTopNavigation.tsx
 │   │   ├── AnalyticsDashboard.tsx
 │   │   ├── AdminReviews.tsx
@@ -396,8 +397,8 @@ shopcartpro/
 │   │   ├── DirectPaymentModal.tsx
 │   │   └── ...
 │   │
-│   ├── employee/                # Employee Components (Premium)
-│   │   └── PaidFeatureMessage.tsx   # Premium Upgrade Message
+│   ├── employee/                # Employee Components
+│   │   └── EmployeeNav.tsx
 │   │
 │   ├── product/                 # Product Components
 │   │   ├── ProductCard.tsx
@@ -418,7 +419,7 @@ shopcartpro/
 │   │   ├── select.tsx
 │   │   └── ...
 │   │
-│   ├── PremiumFloatingButton.tsx    # Premium Upgrade Button
+│   ├── chat/ChatWidget.tsx          # FastBot chat assistant
 │   ├── Header.tsx
 │   ├── Footer.tsx
 │   ├── Container.tsx
@@ -509,7 +510,7 @@ shopcartpro/
 - URL: [http://localhost:3000/studio](http://localhost:3000/studio)
 - Features: Content management, product creation, image uploads
 
-### 👔 Employee Portal (Premium)
+### 👔 Employee Portal
 
 - URL: [http://localhost:3000/employee](http://localhost:3000/employee)
 
@@ -679,17 +680,28 @@ Built with amazing open-source technologies:
 
 **Current Version**: 0.1.0 
 
-**Premium Version Features**:
+**Included features** (no paid tiers — everything is unlocked):
 
-- 📊 Advanced Analytics
-- 👥 Employee Management
-- 📝 Review Management
-- 📬 Subscription Tools
-- 📈 Customer Insights
-- 📥 Data Export
-- 🎨 Custom Branding
-- 🚀 Priority Support
+- 📊 Admin dashboard & analytics
+- 👥 Employee management and employee portal
+- 📝 Review management
+- 📬 Subscription tools
+- 🛠️ Product management: add, edit, delete products and upload photos straight to Sanity (`/admin/products`)
+- 🤖 FastBot chat assistant (orders, availability, deals, store summary for admins)
+- 🖼️ `pnpm seed` — populate Sanity with demo data and real photos from Pixabay/Unsplash
 
+### FastBot
+
+A floating chat widget (`components/chat/ChatWidget.tsx`) backed by `POST /api/chat`. It answers from live Sanity
+data and needs no external AI service. Guests get product/deal/policy answers; signed-in customers can also look
+up **their own** orders; admins can look up any order, get a store summary and a low-stock report.
+
+### Real product photos
+
+```bash
+# .env: add PIXABAY_API_KEY or UNSPLASH_ACCESS_KEY (see .env.example)
+pnpm seed:reset   # replaces previously seeded demo content with photo-backed content
+```
 
 ---
 

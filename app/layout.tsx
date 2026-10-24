@@ -6,7 +6,7 @@ import { Toaster } from "sonner";
 import Script from "next/script";
 import Head from "next/head";
 import { UserDataProvider } from "@/contexts/UserDataContext";
-import PremiumFloatingButton from "@/components/PremiumFloatingButton";
+import ChatWidget from "@/components/chat/ChatWidget";
 import "./globals.css";
 
 const poppins = localFont({
@@ -28,7 +28,7 @@ const opensans = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shopcartpro.reactbd.org"),
+  metadataBase: new URL((process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000")),
   title: {
     template: "%s | ShopCart - Premium Online Shopping",
     default: "ShopCart - Your Trusted Online Shopping Destination",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://shopcartpro.reactbd.org",
+    url: (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
     siteName: "ShopCart",
     title: "ShopCart - Your Trusted Online Shopping Destination",
     description:
@@ -96,7 +96,7 @@ export const metadata: Metadata = {
     // Add other verification codes as needed
   },
   alternates: {
-    canonical: "https://shopcartpro.reactbd.org",
+    canonical: (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
   },
 };
 
@@ -112,7 +112,7 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
           className={`${poppins.variable} ${raleway.variable} ${opensans.variable} antialiased`}
         >
           <UserDataProvider>{children}</UserDataProvider>
-          <PremiumFloatingButton />
+          <ChatWidget />
           <Toaster
             position="bottom-right"
             richColors
