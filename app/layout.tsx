@@ -30,11 +30,11 @@ const opensans = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL((process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000")),
   title: {
-    template: "%s | ShopCart - Premium Online Shopping",
-    default: "ShopCart - Your Trusted Online Shopping Destination",
+    template: "%s | Titan - Premium Online Shopping",
+    default: "Titan - Your Trusted Online Shopping Destination",
   },
   description:
-    "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service. Shop electronics, fashion, home goods and more with fast delivery.",
+    "Discover amazing products at Titan, your trusted online shopping destination for quality items and exceptional customer service. Shop electronics, fashion, home goods and more with fast delivery.",
   keywords: [
     "online shopping",
     "e-commerce",
@@ -45,11 +45,11 @@ export const metadata: Metadata = {
     "home goods",
     "deals",
     "discounts",
-    "ShopCart",
+    "Titan",
   ],
-  authors: [{ name: "ShopCart" }],
-  creator: "ShopCart",
-  publisher: "ShopCart",
+  authors: [{ name: "Titan" }],
+  creator: "Titan",
+  publisher: "Titan",
   formatDetection: {
     email: false,
     address: false,
@@ -59,26 +59,26 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: (process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"),
-    siteName: "ShopCart",
-    title: "ShopCart - Your Trusted Online Shopping Destination",
+    siteName: "Titan",
+    title: "Titan - Your Trusted Online Shopping Destination",
     description:
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service.",
+      "Discover amazing products at Titan, your trusted online shopping destination for quality items and exceptional customer service.",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "ShopCart Online Store",
+        alt: "Titan Online Store",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ShopCart - Your Trusted Online Shopping Destination",
+    title: "Titan - Your Trusted Online Shopping Destination",
     description:
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service.",
+      "Discover amazing products at Titan, your trusted online shopping destination for quality items and exceptional customer service.",
     images: ["/og-image.jpg"],
-    creator: "@shopcart",
+    creator: "@titan",
   },
   robots: {
     index: true,

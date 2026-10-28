@@ -76,7 +76,7 @@ const Footer = () => {
           <p>
             © {new Date().getFullYear()}{" "}
             <span className="text-dark-color font-black tracking-wider uppercase hover:text-shop_dark_green hoverEffect group font-sans">
-              Tita
+              Tit
               <span className="text-shop_dark_green group-hover:text-dark-color hoverEffect">
                 an
               </span>

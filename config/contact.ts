@@ -2,8 +2,8 @@
 
 export const contactConfig = {
   company: {
-    name: process.env.NEXT_PUBLIC_COMPANY_NAME || "ShopCart",
-    email: process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@shopcart.com",
+    name: process.env.NEXT_PUBLIC_COMPANY_NAME || "Titan",
+    email: process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@titan.com",
     phone: process.env.NEXT_PUBLIC_COMPANY_PHONE || "+1 (555) 123-4567",
     address:
       process.env.NEXT_PUBLIC_COMPANY_ADDRESS ||
@@ -11,7 +11,7 @@ export const contactConfig = {
     city: process.env.NEXT_PUBLIC_COMPANY_CITY || "New York, NY 10001, USA",
     description:
       process.env.NEXT_PUBLIC_COMPANY_DESCRIPTION ||
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service.",
+      "Discover amazing products at Titan, your trusted online shopping destination for quality items and exceptional customer service.",
   },
   businessHours: {
     weekday:
@@ -22,8 +22,8 @@ export const contactConfig = {
       "Saturday - Sunday: 10AM - 4PM EST",
   },
   emails: {
-    support: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@shopcart.com",
-    sales: process.env.NEXT_PUBLIC_SALES_EMAIL || "sales@shopcart.com",
+    support: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@titan.com",
+    sales: process.env.NEXT_PUBLIC_SALES_EMAIL || "sales@titan.com",
   },
   responseTime: {
     standard:

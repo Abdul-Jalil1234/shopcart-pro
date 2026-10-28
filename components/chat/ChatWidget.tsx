@@ -37,7 +37,7 @@ const ChatWidget = () => {
     {
       id: 0,
       from: "bot",
-      text: "Hi, I'm FastBot 👋 Ask me about orders, product availability, deals or shipping.",
+      text: "Hi, I'm Titan companion 👋 Ask me about orders, product availability, deals or shipping.",
     },
   ]);
   const idRef = useRef(1);
@@ -112,14 +112,14 @@ const ChatWidget = () => {
       {open && (
         <section
           role="dialog"
-          aria-label="FastBot chat assistant"
+          aria-label="Titan Companion chat assistant"
           className="fixed bottom-0 right-0 z-50 flex h-[100dvh] w-full flex-col overflow-hidden border bg-white shadow-2xl sm:bottom-5 sm:right-5 sm:h-[560px] sm:w-[380px] sm:rounded-2xl"
         >
           <header className="flex items-center justify-between bg-shop_dark_green px-4 py-3 text-white">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
               <div>
-                <p className="text-sm font-semibold leading-none">FastBot</p>
+                <p className="text-sm font-semibold leading-none">Titan Companion</p>
                 <p className="mt-1 text-[11px] opacity-80">Orders · Products · Help</p>
               </div>
             </div>

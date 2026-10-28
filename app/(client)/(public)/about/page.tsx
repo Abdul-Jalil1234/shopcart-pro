@@ -57,19 +57,19 @@ const AboutPage = () => {
 
   const team = [
     {
-      name: "Sarah Johnson",
+      name: "Abdul-Jalil Fuseini",
       role: "CEO & Founder",
       image: "/images/team/ceo.jpg",
       description: "Visionary leader with 15+ years in e-commerce",
     },
     {
-      name: "Michael Chen",
+      name: "Habib Yahuza",
       role: "CTO",
       image: "/images/team/cto.jpg",
       description: "Tech innovator driving our digital transformation",
     },
     {
-      name: "Emily Rodriguez",
+      name: "Ama Serwaa",
       role: "Head of Design",
       image: "/images/team/design.jpg",
       description: "Creative force behind our user experience",
@@ -87,10 +87,10 @@ const AboutPage = () => {
             className="text-center"
           >
             <Badge className="mb-6 bg-white/20 text-white border-white/30 hover:bg-white/30">
-              Est. 2025
+              Est. 2024
             </Badge>
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-              About ShopCart
+              About Titan
             </h1>
             <p className="text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
               We&apos;re revolutionizing online shopping with curated products,
@@ -143,7 +143,7 @@ const AboutPage = () => {
                 Building the Future of E-commerce
               </h2>
               <p className="text-lg text-dark-text mb-6 leading-relaxed">
-                Founded in 2020 with a simple mission: make online shopping more
+                Founded in 2024 with a simple mission: make online shopping more
                 personal, more accessible, and more enjoyable for everyone. What
                 started as a small team with big dreams has grown into a
                 platform trusted by thousands of customers worldwide.
@@ -184,7 +184,7 @@ const AboutPage = () => {
                   &quot;Shopping should be delightful, not a chore. We&apos;re
                   here to make every purchase feel special.&quot;
                 </blockquote>
-                <p className="mt-4 font-semibold">- Sarah Johnson, Founder</p>
+                <p className="mt-4 font-semibold">- Abdul-Jalil Fuseini, Founder</p>
               </div>
             </motion.div>
           </div>
@@ -253,7 +253,7 @@ const AboutPage = () => {
               Leadership Team
             </Badge>
             <h2 className="text-4xl font-bold text-shop_dark_green mb-4">
-              Meet the Minds Behind ShopCart
+              Meet the Minds Behind Titan
             </h2>
             <p className="text-lg text-dark-text max-w-2xl mx-auto">
               Our passionate team of experts working tirelessly to create the
