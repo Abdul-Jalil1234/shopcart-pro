@@ -1,4 +1,4 @@
-# 🛒 ShopCart Pro - Complete E-Commerce Solution
+# 🛒 Titan - Complete E-Commerce Solution
 
 A modern, feature-rich e-commerce application built with Next.js 16, TypeScript, Sanity CMS, Clerk Authentication, and Stripe/Clerk Payments. 
 
